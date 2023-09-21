@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace TaskManagementApp.Application.Features.TaskItems
     public class TaskItemService : ITaskItemService
     {
         private readonly ITaskItemRepository _taskItemRepository;
+        private readonly IMapper _mapper;
 
         public TaskItemService(ITaskItemRepository taskItemRepository)
         {
@@ -23,13 +25,15 @@ namespace TaskManagementApp.Application.Features.TaskItems
 
         public async Task<CreateTaskItemRequest> CreateTaskAsync(CreateTaskItemRequest request)
         {
-            var task = new TaskItem {
+            var task = new TaskItem
+            {
                 TaskId = request.TaskId,
                 Title = request.Title,
                 Description = request.Description,
                 DueDate = request.DueDate,
                 status = request.status
-                };
+            };
+            //var task = _mapper.Map<TaskItem>(request);
             await _taskItemRepository.AddAsync(task);
             return request;
         }
